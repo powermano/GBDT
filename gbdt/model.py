@@ -264,7 +264,7 @@ class GBDT:
         if self.loss.K == 1:
             f_value = 0.0
             for iter in self.trees:
-                f_value += self.learn_rate * iter.get_predict_value(instance)
+                f_value += self.learn_rate * self.trees[iter].get_predict_value(instance)
         else:
             f_value = dict()
             for label in self.loss.labelset:
@@ -309,7 +309,7 @@ class GBDT:
         predict_label = None
         if isinstance(self.loss, BinomialDeviance):
             probs = self.predict_prob(instance)
-            predict_label = 1 if probs[1] >= probs[-1] else -1
+            predict_label = 1 if probs['+1'] >= probs['-1'] else -1
         else:
             probs = self.predict_prob(instance)
             # 选出K分类中，概率值最大的label
